@@ -1,5 +1,6 @@
 const body = document.querySelector("body");
 const btnEnviar = document.getElementById("btnEnviar");
+const btnPincharImg = document.getElementById("")
 
 
 let box = [];
@@ -20,8 +21,11 @@ function apiRickMorty(character) {
             data.results.map(character => {
                 elem(character)
             });
-            
             console.log(data)
+        // .then(data => {
+        //     elemDetalle(character)
+        // }    
+            
             // elem(data)
             //  => document.getElementById("infoName").innerHTML)
         })
@@ -31,35 +35,88 @@ function apiRickMorty(character) {
 
 
 function elem (character) {
+
+    // const contenedorPrincipal = document.getElementById("contenedorPrincipal")
+
+    // let contenedorPrincipal = document.createElement("div");
+    // contenedorPrincipal.setAttribute("id", "contenedorPrincipal");
+    // body.appendChild(contenedorPrincipal);
     let imageCharacter = document.createElement("img");
     imageCharacter.src = character.image;
-    imageCharacter.setAttribute("class", "character");
+    imageCharacter.setAttribute("class", "imageCharacter");
     body.appendChild(imageCharacter);
 
-    box.push(imageCharacter);
+    imageCharacter.addEventListener("click", () => { imprimeDetalle(character)});
+
+        box.push(imageCharacter);
 
     let nameCharacter = document.createElement("p");
     nameCharacter.textContent = character.name;
     nameCharacter.setAttribute("class", "name");
     body.appendChild(nameCharacter);
 
-    box.push(nameCharacter);
+          box.push(nameCharacter);
 
     let locationCharacter = document.createElement("p");
     locationCharacter.textContent = character.location.name;
     locationCharacter.setAttribute("class", "dates");
     body.appendChild(locationCharacter);
 
-    box.push(locationCharacter);
+         box.push(locationCharacter);
 
     let originCharacter = document.createElement("p");
     originCharacter.textContent = character.origin.name;
     originCharacter.setAttribute("class", "dates");
     body.appendChild(originCharacter);
 
-    box.push(originCharacter);
-}
+         box.push(originCharacter);
 
+
+    };
+
+
+
+    
+
+function imprimeDetalle(idPersonaje) {
+    if(idPersonaje !== "") {
+        fetch(`https://rickandmortyapi.com/api/location/${idPersonaje}`)
+        .then(response => response.json())
+        .then(data => {
+            cleanArray(box);
+            data.map(episode => { pintaDetalle(episode) });
+            
+            })
+    }}
+
+/*
+
+
+     .then(data => {
+            cleanArray(box);
+            // elem(data)
+            data.results.map(character => {
+                elem(character)
+
+            
+
+function pintaDetalle(detalles) {
+
+    let episodios = document.createElement("img");
+    episodios.src = detalles.episode;
+    body.appendChild(episodios);
+
+
+
+}
+ 
+*/
+
+
+// function elemDetalle(character){
+//     const imagenPinchada = character.filter( character => character.id);
+
+// }
 
 
 btnEnviar.addEventListener("click", function() {
@@ -69,12 +126,6 @@ btnEnviar.addEventListener("click", function() {
     
     // console.log(apiRickMorty(value));
   });
-
-
-
-
-
-
 
 
 
