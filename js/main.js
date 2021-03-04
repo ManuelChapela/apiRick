@@ -9,12 +9,20 @@ function cleanArray (box) {
         box[i].remove()
 }}
 
+// variable global y localstorage
+
+
 
 
 function apiRickMorty(character) {
     if(character !== "") {
         fetch(`https://rickandmortyapi.com/api/character/?name=${character}`)
         .then(response => response.json())
+        
+        .then(data => 
+            localStorage.setItem("busqueda", JSON.stringify(data) ))
+            return data
+            
         .then(data => {
             cleanArray(box);
             // elem(data)
@@ -25,9 +33,6 @@ function apiRickMorty(character) {
         // .then(data => {
         //     elemDetalle(character)
         // }    
-            
-            // elem(data)
-            //  => document.getElementById("infoName").innerHTML)
         })
     }
 }
@@ -36,19 +41,13 @@ function apiRickMorty(character) {
 
 function elem (character) {
 
-    // const contenedorPrincipal = document.getElementById("contenedorPrincipal")
+    // let imageCharacter = document.createElement("img");
+    // imageCharacter.src = character.image;
+    // imageCharacter.setAttribute("class", "imageCharacter");
+    // body.appendChild(imageCharacter);
+    // box.push(imageCharacter);
 
-    // let contenedorPrincipal = document.createElement("div");
-    // contenedorPrincipal.setAttribute("id", "contenedorPrincipal");
-    // body.appendChild(contenedorPrincipal);
-    let imageCharacter = document.createElement("img");
-    imageCharacter.src = character.image;
-    imageCharacter.setAttribute("class", "imageCharacter");
-    body.appendChild(imageCharacter);
-
-    imageCharacter.addEventListener("click", () => { imprimeDetalle(character)});
-
-        box.push(imageCharacter);
+    // imageCharacter.addEventListener("click", () => { imprimeDetalle(character.id)});
 
     let nameCharacter = document.createElement("p");
     nameCharacter.textContent = character.name;
@@ -57,37 +56,120 @@ function elem (character) {
 
           box.push(nameCharacter);
 
-    let locationCharacter = document.createElement("p");
-    locationCharacter.textContent = character.location.name;
-    locationCharacter.setAttribute("class", "dates");
-    body.appendChild(locationCharacter);
-
-         box.push(locationCharacter);
-
-    let originCharacter = document.createElement("p");
-    originCharacter.textContent = character.origin.name;
-    originCharacter.setAttribute("class", "dates");
-    body.appendChild(originCharacter);
-
-         box.push(originCharacter);
+    nameCharacter.addEventListener("click", () => { imprimeDetalle(character.id)});
 
 
+    // let locationCharacter = document.createElement("p");
+    // locationCharacter.textContent = character.location.name;
+    // locationCharacter.setAttribute("class", "dates");
+    // body.appendChild(locationCharacter);
+
+    //      box.push(locationCharacter);
+
+    // let originCharacter = document.createElement("p");
+    // originCharacter.textContent = character.origin.name;
+    // originCharacter.setAttribute("class", "dates");
+    // body.appendChild(originCharacter);
+
+    //      box.push(originCharacter);
     };
 
 
 
-    
 
-function imprimeDetalle(idPersonaje) {
-    if(idPersonaje !== "") {
-        fetch(`https://rickandmortyapi.com/api/location/${idPersonaje}`)
+function imprimeDetalle(detallePersonaje) {
+    if(detallePersonaje !== "") {
+        fetch(`https://rickandmortyapi.com/api/character/${detallePersonaje}`) 
+        // El fetch tiene que llamar a los enlaces que tiene el personaje seleccionado por "id". 
         .then(response => response.json())
         .then(data => {
             cleanArray(box);
-            data.map(episode => { pintaDetalle(episode) });
-            
+            pintaDetalle(data);
             })
-    }}
+    }};
+
+
+function pintaDetalle(detalles) {
+
+    let detailImgCharacter = document.createElement("img");
+    detailImgCharacter.src = detalles.image;
+    body.appendChild(detailImgCharacter);
+
+        box.push(detailImgCharacter);
+
+    let detailNameCharacter = document.createElement("p");
+    detailNameCharacter.textContent = detalles.name;
+    body.appendChild(detailNameCharacter);
+
+        box.push(detailNameCharacter);
+
+    let detailStatusCharacter = document.createElement("p");
+    detailStatusCharacter.textContent = detalles.status;
+    body.appendChild(detailStatusCharacter);
+
+        box.push(detailStatusCharacter);
+
+    let detailSpeciesCharacter = document.createElement("p");
+    detailSpeciesCharacter.textContent = detalles.species;
+    body.appendChild(detailSpeciesCharacter);
+
+        box.push(detailSpeciesCharacter);
+
+    let detailGenderCharacter = document.createElement("p");
+    detailGenderCharacter.textContent = detalles.gender;
+    body.appendChild(detailGenderCharacter);
+
+        box.push(detailGenderCharacter);
+
+    let detailOriginCharacter = document.createElement("p");
+    detailOriginCharacter.textContent = detalles.origin.name;
+    body.appendChild(detailOriginCharacter);
+
+        box.push(detailOriginCharacter);
+
+    let createBoton = document.createElement("input");
+    createBoton.setAttribute("id", "btnAtras");
+    createBoton.setAttribute("class", "btnEnviar");
+    createBoton.setAttribute("type", "button");
+    createBoton.setAttribute("value", "Volver atrás");
+    body.appendChild(createBoton);
+        
+        box.push(createBoton);
+
+        createBoton.addEventListener("click", () => {  })
+
+// let character = data;
+
+// // Guardar datos al almacenamiento local actual
+// localStorage.setItem("nombreDeBusqueda", character);
+
+// // Acceder a datos almacenados
+// alert( "nombreDeBusqueda = " + localStorage.getItem("nombreDeBusqueda"));
+    
+
+}
+
+
+
+btnEnviar.addEventListener("click", function() {
+    const value = document.getElementById("search").value;
+
+    apiRickMorty(value);
+    
+    // console.log(apiRickMorty(value));
+  });
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 
@@ -100,15 +182,6 @@ function imprimeDetalle(idPersonaje) {
 
             
 
-function pintaDetalle(detalles) {
-
-    let episodios = document.createElement("img");
-    episodios.src = detalles.episode;
-    body.appendChild(episodios);
-
-
-
-}
  
 */
 
@@ -117,15 +190,6 @@ function pintaDetalle(detalles) {
 //     const imagenPinchada = character.filter( character => character.id);
 
 // }
-
-
-btnEnviar.addEventListener("click", function() {
-    const value = document.getElementById("search").value;
-
-    apiRickMorty(value);
-    
-    // console.log(apiRickMorty(value));
-  });
 
 
 
