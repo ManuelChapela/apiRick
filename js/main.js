@@ -3,6 +3,7 @@ const btnEnviar = document.getElementById("btnEnviar");
 const btnPincharImg = document.getElementById("")
 
 
+// Esta función podría eliminar un div contenedor con todos los elementos.
 let box = [];
 function cleanArray (box) {
     for (let i = 0; i < box.length ; i++) {
@@ -12,43 +13,34 @@ function cleanArray (box) {
 // variable global y localstorage
 
 
-
+let myCharacter;
 
 function apiRickMorty(character) {
     if(character !== "") {
         fetch(`https://rickandmortyapi.com/api/character/?name=${character}`)
         .then(response => response.json())
         
-        .then(data => 
-            localStorage.setItem("busqueda", JSON.stringify(data) ))
+        // Local Storage que recupera datos con el primer parámetro `busqueda+parametrodebusqueda`, JSON.stringify(data) que es una forma de hacer que se convierta en string el JSON. Se returna data originalmente para poder seguir trabajando con un JSON.
+        .then(data => {
+            localStorage.setItem(`${character}`, JSON.stringify(data) )
+            myCharacter = character;
             return data
+        })
             
         .then(data => {
             cleanArray(box);
             // elem(data)
+            
             data.results.map(character => {
                 elem(character)
-            });
-            console.log(data)
-        // .then(data => {
-        //     elemDetalle(character)
-        // }    
+            })
         })
     }
 }
 
 
-
+// FUNCIÓN que es invocada por la principal y que se encarga de pintar los diferentes nombres que coinciden con el parámetro de búsqueda. 
 function elem (character) {
-
-    // let imageCharacter = document.createElement("img");
-    // imageCharacter.src = character.image;
-    // imageCharacter.setAttribute("class", "imageCharacter");
-    // body.appendChild(imageCharacter);
-    // box.push(imageCharacter);
-
-    // imageCharacter.addEventListener("click", () => { imprimeDetalle(character.id)});
-
     let nameCharacter = document.createElement("p");
     nameCharacter.textContent = character.name;
     nameCharacter.setAttribute("class", "name");
@@ -57,26 +49,9 @@ function elem (character) {
           box.push(nameCharacter);
 
     nameCharacter.addEventListener("click", () => { imprimeDetalle(character.id)});
-
-
-    // let locationCharacter = document.createElement("p");
-    // locationCharacter.textContent = character.location.name;
-    // locationCharacter.setAttribute("class", "dates");
-    // body.appendChild(locationCharacter);
-
-    //      box.push(locationCharacter);
-
-    // let originCharacter = document.createElement("p");
-    // originCharacter.textContent = character.origin.name;
-    // originCharacter.setAttribute("class", "dates");
-    // body.appendChild(originCharacter);
-
-    //      box.push(originCharacter);
     };
 
-
-
-
+// Esta función va a seleccionar el parámetro (a través de ID) e invocar la función pintaDetalle(detalles) para que nos indique todas las características que le pedimos.
 function imprimeDetalle(detallePersonaje) {
     if(detallePersonaje !== "") {
         fetch(`https://rickandmortyapi.com/api/character/${detallePersonaje}`) 
@@ -89,6 +64,7 @@ function imprimeDetalle(detallePersonaje) {
     }};
 
 
+// Esta función pinta los detalles en el DOM con la imagen y todos los elementos. 
 function pintaDetalle(detalles) {
 
     let detailImgCharacter = document.createElement("img");
@@ -136,28 +112,49 @@ function pintaDetalle(detalles) {
         
         box.push(createBoton);
 
-        createBoton.addEventListener("click", () => {  })
+        // Creación botón de atrás con un evento de clic que nos imprime los datos almacenados en la busqueda anterior a través de localStorage. 
+        createBoton.addEventListener("click", () => { 
+            cleanArray(box);
+            let obtencionDatosBusqueda = JSON.parse( localStorage.getItem (myCharacter))
 
-// let character = data;
+               
+                obtencionDatosBusqueda.results.map(character => {
+                    elem(character)
+                })
+            
+            
 
-// // Guardar datos al almacenamiento local actual
-// localStorage.setItem("nombreDeBusqueda", character);
+            // character = cada uno de los elementos.
+            
 
-// // Acceder a datos almacenados
-// alert( "nombreDeBusqueda = " + localStorage.getItem("nombreDeBusqueda"));
-    
+                // let nameCharacter2 = document.createElement("p");
+                // nameCharacter2.textContent = obtencionDatosBusqueda.name;
+                // nameCharacter2.setAttribute("class", "name2");
+                // body.appendChild(nameCharacter2);
+            
+                    // box.push(nameCharacter2);
+
+            console.log(obtencionDatosBusqueda);
+        })
+
 
 }
 
 
+// function recuperarDatosMemoria() {
+
+//     
+
+// }
 
 btnEnviar.addEventListener("click", function() {
-    const value = document.getElementById("search").value;
+ const value = document.getElementById("search").value;
 
-    apiRickMorty(value);
-    
-    // console.log(apiRickMorty(value));
-  });
+ apiRickMorty(value);
+ 
+ // console.log(apiRickMorty(value));
+});
+
 
 
 
