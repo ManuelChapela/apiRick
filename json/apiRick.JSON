@@ -1,0 +1,17 @@
+{
+"favoritos":[
+
+ {
+    "name": "Rick Sanchez",
+    "status": "Alive",
+    "species": "Human",
+    "gender": "Male"
+}, 
+{
+    "name": "Rick Sanchez",
+    "status": "Alive",
+    "species": "Human",
+    "gender": "Male"
+}
+]
+}
